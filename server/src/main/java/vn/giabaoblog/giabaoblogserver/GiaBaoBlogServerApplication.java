@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories
 @EnableScheduling
 @SpringBootApplication
-//@EntityScan(basePackages = {"vn.giabaoblog.giabaoblogserver"})
 public class GiaBaoBlogServerApplication {
 
 	public static void main(String[] args) {
