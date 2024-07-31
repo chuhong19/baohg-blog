@@ -13,5 +13,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new ChatHandler(), "/community")
                 .setAllowedOrigins("*");
+        registry.addHandler(new GameHandler(), "/tictactoe")
+                .setAllowedOrigins("*");
     }
 }

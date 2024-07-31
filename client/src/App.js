@@ -11,6 +11,7 @@ import Home from './views/Home';
 import Stalk from './views/Stalk';
 import Profile from './views/Profile';
 import Community from './views/Community';
+import TictacToe from './views/Tictactoe';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path='/stalk/:stalkUserId' Component={Stalk} />
               <Route path='/community' Component={Community} />
               <Route path='/profile' Component={Profile} />
+              <Route path='/tictactoe' Component={TictacToe} />
             </Route>
           </Routes>
         </PostsContextProvider>
