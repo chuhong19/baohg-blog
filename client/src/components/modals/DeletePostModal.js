@@ -34,7 +34,7 @@ const DeletePostModal = () => {
         <Modal show={showDeletePostModal} animation={false} onHide={closeDialog}>
             <AlertMessage info={alert} />
             <Modal.Header closeButton>
-                <Modal.Title>Edit post</Modal.Title>
+                <Modal.Title>Delete post</Modal.Title>
             </Modal.Header>
             <Form onSubmit={onSubmit}>
                 <Modal.Body>

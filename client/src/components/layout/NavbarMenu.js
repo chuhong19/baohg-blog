@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useContext } from 'react';
-import TictacToe from '../../views/Tictactoe';
 
 const NavbarMenu = ({ children }) => {
 

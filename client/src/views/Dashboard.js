@@ -34,7 +34,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getAllPosts();
-    }, []);
+    }, [getAllPosts]);
 
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [selectedPostAuthor, setSelectedPostAuthor] = useState(null);
@@ -77,6 +77,8 @@ const Dashboard = () => {
                         </Card.Text>
                         <Button
                             variant='primary'
+                            onClick={() => setShowAddPostModal(true)}
+                            // onClick={setShowAddPostModal.bind(this, true)}
                         >
                             Create post now
                         </Button>
@@ -105,7 +107,7 @@ const Dashboard = () => {
                 {/* Open add post modal */}
                 <OverlayTrigger
                     placement='left'
-                    overlay={<Tooltip>Add a new thing to learn</Tooltip>}
+                    overlay={<Tooltip>Add a new post</Tooltip>}
                 >
                     <Button
                         className='btn-floating'

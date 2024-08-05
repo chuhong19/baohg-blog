@@ -10,6 +10,7 @@ import { PostsContext } from "../contexts/PostsContext";
 import InfoPostModal from "../components/modals/InfoPostModal";
 import EditPostModal from "../components/modals/EditPostModal";
 import DeletePostModal from "../components/modals/DeletePostModal";
+import AddPostModal from "../components/modals/AddPostModal";
 
 const Home = () => {
 
@@ -23,6 +24,7 @@ const Home = () => {
     const {
         allMyPostsState: { allMyPosts, allMyPostsLoading },
         getAllMyPosts,
+        setShowAddPostModal,
         setShowInfoPostModal,
         setShowEditPostModal,
         setShowDeletePostModal
@@ -30,7 +32,7 @@ const Home = () => {
 
     useEffect(() => {
         getAllMyPosts();
-    }, []);
+    }, [getAllMyPosts]);
 
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [selectedPostAuthor, setSelectedPostAuthor] = useState(null);
@@ -77,6 +79,7 @@ const Home = () => {
                         </Card.Text>
                         <Button
                             variant='primary'
+                            onClick={() => setShowAddPostModal(true)}
                         >
                             Create post now
                         </Button>
@@ -112,7 +115,10 @@ const Home = () => {
         )
     }
     return (
-        <>{body}</>
+        <>
+            {body}
+            <AddPostModal />
+        </>
     )
 }
 
