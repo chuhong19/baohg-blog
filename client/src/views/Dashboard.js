@@ -34,7 +34,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getAllPosts();
-    }, [getAllPosts]);
+    }, []);
 
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [selectedPostAuthor, setSelectedPostAuthor] = useState(null);

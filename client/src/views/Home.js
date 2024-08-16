@@ -32,7 +32,7 @@ const Home = () => {
 
     useEffect(() => {
         getAllMyPosts();
-    }, [getAllMyPosts]);
+    }, []);
 
     const [selectedPostId, setSelectedPostId] = useState(null);
     const [selectedPostAuthor, setSelectedPostAuthor] = useState(null);
