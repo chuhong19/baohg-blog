@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import vn.giabaoblog.giabaoblogserver.data.enums.TokenType;
 import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.TokenRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
+import vn.giabaoblog.giabaoblogserver.services.RefreshTokenService;
 import vn.giabaoblog.giabaoblogserver.services.UserService;
 import vn.giabaoblog.giabaoblogserver.services.validation.PasswordValidatorService;
 
@@ -43,8 +45,11 @@ public class AuthenticationService {
     private final UserService userService;
     private final PasswordValidatorService passwordValidatorService;
 
+    @Autowired
+    public RefreshTokenService refreshTokenService;
+
     @Transactional
-    public AuthenticationResponse internalRegister(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) {
         passwordValidatorService.checkPassword(request.getPassword());
         Optional<Role> userRoleOptional = roleRepository.findByRole("USER");
 
@@ -65,42 +70,22 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = userRepository.save(user);
-        return _authentication(savedUser, Long.toString(savedUser.getId()), "internal");
+        return _authentication(savedUser, Long.toString(savedUser.getId()));
     }
 
-    public AuthenticationResponse internalAuthenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsernameOrEmail(request.getUsername()).orElseThrow(() -> new ForbiddenException("Invalid username or password"));
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getId(), request.getPassword()));
-        return _authentication(user, Long.toString(user.getId()), "internal");
+        return _authentication(user, Long.toString(user.getId()));
     }
 
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userId;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        refreshToken = authHeader.substring(7);
-        userId = jwtService.extractId(refreshToken);
-        //if (userId != null) {
-        //    var user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow();
-        //    if (jwtService.isTokenValid(refreshToken, user)) {
-        //        var authResponse = playfabAuthentication(user);
-        //        response.setHeader("Content-type", "application/json");
-        //        new ObjectMapper().writeValue(response.getOutputStream(), StandardResponse.create(authResponse));
-        //    }
-        //}
-        throw new ForbiddenException("Cai nay co van de chua xu ly");
-    }
-
-    private AuthenticationResponse _authentication(final User user, final String uid, final String network) {
+    private AuthenticationResponse _authentication(final User user, final String uid) {
         Objects.requireNonNull(user, "Invalid user");
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var refreshToken = refreshTokenService.createRefreshToken(user.getId());
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).expiresIn(jwtService.getJwtExpiration()).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken.getToken()).expiresIn(jwtService.getJwtExpiration()).build();
     }
 
     private void saveUserToken(User user, String jwtToken) {

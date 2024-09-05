@@ -3,6 +3,7 @@ package vn.giabaoblog.giabaoblogserver.controller;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,18 +11,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import vn.giabaoblog.giabaoblogserver.config.exception.NotFoundException;
+import vn.giabaoblog.giabaoblogserver.config.exception.TokenRefreshException;
+import vn.giabaoblog.giabaoblogserver.data.domains.RefreshToken;
+import vn.giabaoblog.giabaoblogserver.data.domains.User;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.AuthenticationRequest;
+import vn.giabaoblog.giabaoblogserver.data.dto.request.TokenRefreshRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.AuthenticationResponse;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.RegisterRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.StandardResponse;
+import vn.giabaoblog.giabaoblogserver.data.dto.response.TokenRefreshResponse;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.UserInfoResponse;
-import vn.giabaoblog.giabaoblogserver.data.enums.Gender;
+import vn.giabaoblog.giabaoblogserver.services.RefreshTokenService;
 import vn.giabaoblog.giabaoblogserver.services.authentication.AuthenticationService;
 import vn.giabaoblog.giabaoblogserver.services.authentication.EncryptionService;
 import vn.giabaoblog.giabaoblogserver.services.authentication.JwtService;
 
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,25 +38,36 @@ public class AuthenticationController {
     @Autowired
     public JwtService jwtService;
 
+    @Autowired
+    public RefreshTokenService refreshTokenService;
+
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<?> internalRegister(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(StandardResponse.create(
-                authenticationService.internalRegister(request)
+                authenticationService.register(request)
         ));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<StandardResponse<AuthenticationResponse>> internalAuthenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(StandardResponse.create(
-                authenticationService.internalAuthenticate(request)
+                authenticationService.authenticate(request)
         ));
     }
 
-    @PostMapping("/internal/refresh-token")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        authenticationService.refreshToken(request, response);
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    var accessToken = jwtService.generateToken(user);
+                    return ResponseEntity.ok(new TokenRefreshResponse(accessToken, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException("Refresh token is not in database!"));
     }
 
     @GetMapping("/identify")

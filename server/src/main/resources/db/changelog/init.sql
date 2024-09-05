@@ -179,3 +179,4 @@ ALTER TABLE "meetings"
 --changeset giabaost1910:add-duration-to-table-meeting
 ALTER TABLE "meetings"
     ADD COLUMN "duration" bigint;
+

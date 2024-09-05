@@ -66,59 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new JwtDetails(jwt, claims, new WebAuthenticationDetailsSource().buildDetails(request)));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-
-//                    String uri = request.getRequestURI();
-//                    String method = request.getMethod();
-//                    Map<String, String> headers = Collections.list(request.getHeaderNames()).stream()
-//                            .collect(Collectors.toMap(Function.identity(), request::getHeader));
-//                    String body = new BufferedReader(new InputStreamReader(request.getInputStream())).lines().collect(Collectors.joining("\n"));
-//                    String queryParams = request.getQueryString();
-//                    Enumeration<String> attributeNames = request.getAttributeNames();
-//                    List<String> attributeNameList = Collections.list(attributeNames);
-//                    String pathVariables = attributeNameList.toString();
-//                    String ipAddress = request.getRemoteAddr();
-//                    String userAgent = request.getHeader("User-Agent");
-//                    String sessionId = request.getRequestedSessionId();
-//                    String requestTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
-//
-//                    String responseStatus = String.valueOf(response.getStatus());
-//                    Map<String, String> responseHeaders = response.getHeaderNames().stream()
-//                            .collect(Collectors.toMap(Function.identity(), response::getHeader));
-//                    String responseBody = "";
-//                    long responseDuration = System.currentTimeMillis() - startTime;
-//                    String responseSize = String.valueOf(response.getBufferSize());
-//                    String redirectUrl = response.getHeader("Location");
-//                    String serverInfo = response.getHeader("Server");
-//
-//                    System.out.println("Request: {");
-//                    System.out.println("  \"uri\": \"" + uri + "\",");
-//                    System.out.println("  \"method\": \"" + method + "\",");
-//                    System.out.println("  \"headers\": " + headers + ",");
-//                    System.out.println("  \"body\": \"" + body + "\",");
-//                    System.out.println("  \"queryParams\": \"" + queryParams + "\",");
-//                    System.out.println("  \"pathVariables\": \"" + pathVariables + "\",");
-//                    System.out.println("  \"ipAddress\": \"" + ipAddress + "\",");
-//                    System.out.println("  \"userAgent\": \"" + userAgent + "\",");
-//                    System.out.println("  \"sessionId\": \"" + sessionId + "\",");
-//                    System.out.println("  \"requestTime\": \"" + requestTime + "\"");
-//                    System.out.println("}");
-//
-//                    System.out.println("Response: {");
-//                    System.out.println("  \"status\": \"" + responseStatus + "\",");
-//                    System.out.println("  \"headers\": " + responseHeaders + ",");
-//                    System.out.println("  \"body\": " + responseBody + ",");
-//                    System.out.println("  \"responseDuration\": \"" + responseDuration + "ms\",");
-//                    System.out.println("  \"responseSize\": \"" + responseSize + "\",");
-//                    System.out.println("  \"redirectUrl\": \"" + redirectUrl + "\",");
-//                    System.out.println("  \"serverInfo\": \"" + serverInfo + "\"");
-//                    System.out.println("}");
-//
-//                    System.out.println("Auth header: " + authHeader);
-//                    System.out.println("User id: " + userId);
-//                    System.out.println("Claims: " + claims);
-//                    System.out.println("User details: " + userDetails);
-//                    System.out.println("Auth token: " + authToken);
-//                    System.out.println("Context: " + SecurityContextHolder.getContext());
                 }
             }
         } catch (Exception ex) {

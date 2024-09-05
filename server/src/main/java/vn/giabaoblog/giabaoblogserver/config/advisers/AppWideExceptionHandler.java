@@ -101,5 +101,8 @@ public class AppWideExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("400", "Not enough exception", e.getMessage()));
     }
 
-
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<?> handleTokenRefreshException(TokenRefreshException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("400", "Refresh token not found", e.getMessage()));
+    }
 }

@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.giabaoblog.giabaoblogserver.data.domains.Role;
 import vn.giabaoblog.giabaoblogserver.data.domains.Token;
@@ -14,17 +13,13 @@ import vn.giabaoblog.giabaoblogserver.data.domains.User;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.RegisterRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.AuthenticationResponse;
 import vn.giabaoblog.giabaoblogserver.data.enums.Gender;
-import vn.giabaoblog.giabaoblogserver.data.enums.TokenType;
 import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.TokenRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
 import vn.giabaoblog.giabaoblogserver.services.UserService;
-import vn.giabaoblog.giabaoblogserver.services.authentication.AuthenticationService;
-import vn.giabaoblog.giabaoblogserver.services.authentication.JwtService;
 import vn.giabaoblog.giabaoblogserver.services.validation.PasswordValidatorService;
 
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,7 +72,7 @@ public class AuthenticationServiceTest {
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
 
         // Invoke method
-        AuthenticationResponse response = authenticationService.internalRegister(request);
+        AuthenticationResponse response = authenticationService.register(request);
 
         // Assert result
         assertNotNull(response);
