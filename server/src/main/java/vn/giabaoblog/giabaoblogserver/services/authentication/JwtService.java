@@ -79,10 +79,10 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String id = extractId(token);
+        final String userIdGetFromToken = extractId(token);
         User user = (User) userDetails;
-        final String id1 = String.valueOf(user.getId());
-        return id.equals(id1) && !isTokenExpired(token);
+        final String userId = String.valueOf(user.getId());
+        return userIdGetFromToken.equals(userId) && !isTokenExpired(token);
     }
 
     public boolean isTokenExpired(String token) {

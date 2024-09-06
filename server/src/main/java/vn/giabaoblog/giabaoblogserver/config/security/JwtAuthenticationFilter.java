@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userId;
         final Claims claims;
-        long startTime = System.currentTimeMillis();
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
