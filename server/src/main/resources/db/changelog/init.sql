@@ -174,7 +174,7 @@ ALTER TABLE "meeting_rating"
 
 --changeset giabaost1910:add-rating_count-to-table-meeting
 ALTER TABLE "meetings"
-    ADD COLUMN "meeting_count" bigint;
+    ADD COLUMN "rating_count" bigint;
 
 --changeset giabaost1910:add-duration-to-table-meeting
 ALTER TABLE "meetings"
