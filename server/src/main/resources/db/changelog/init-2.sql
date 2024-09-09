@@ -1,4 +1,4 @@
---changeset giabaost1910:add-refreshtoken-table
+--changeset giabaost1910:create-table-refreshtoken
 CREATE TABLE "refresh_token" (
     "id" bigserial PRIMARY KEY,
     "user_id" int8,
