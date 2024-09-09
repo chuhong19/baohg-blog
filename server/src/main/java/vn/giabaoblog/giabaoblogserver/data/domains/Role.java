@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name="roles")
 @Data
 @NoArgsConstructor
-public class Role extends Auditable {
+public class Role {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO, generator="native")

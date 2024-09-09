@@ -3,9 +3,7 @@
 --changeset giabaost1910:create-table-roles
 CREATE TABLE "roles" (
     "id" bigserial PRIMARY KEY,
-    "role" varchar(255) NOT NULL,
-    "created_at" timestamptz(6),
-    "updated_at" timestamptz(6)
+    "role" varchar(255) NOT NULL
 );
 
 --changeset giabaost1910:create-table-permissions
@@ -13,9 +11,7 @@ CREATE TABLE "permissions" (
     "id" bigserial PRIMARY KEY,
     "permission" varchar(255) NOT NULL,
     "enabled" boolean DEFAULT true,
-    "note" varchar(255),
-    "created_at" timestamptz(6),
-    "updated_at" timestamptz(6)
+    "note" varchar(255)
 );
 
 --changeset giabaost1910:create-table-relations-roles-permissions
