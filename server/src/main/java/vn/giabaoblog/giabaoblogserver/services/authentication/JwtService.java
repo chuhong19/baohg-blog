@@ -75,7 +75,12 @@ public class JwtService {
 
         tokenClaimComponent.getClaims(extraClaims, userDetails, expiration);
 
-        return Jwts.builder().setClaims(extraClaims).setSubject(String.valueOf(userDetails.getId())).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+        return Jwts.builder().
+                setClaims(extraClaims).
+                setSubject(String.valueOf(userDetails.getId())).
+                setIssuedAt(new Date(System.currentTimeMillis())).
+                setExpiration(new Date(System.currentTimeMillis() + expiration)).
+                signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
