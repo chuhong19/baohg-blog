@@ -19,7 +19,6 @@ import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
@@ -71,7 +70,10 @@ public class RefreshTokenService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public RefreshToken verifyExpiration(RefreshToken token) {
+    public RefreshToken verifyValid(RefreshToken token) {
+        if (token.isRevoked()) {
+            throw new TokenRefreshException("Refresh token was revoked");
+        }
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
             throw new TokenRefreshException("Refresh token was expired. Please make a new sign in request");
@@ -86,7 +88,6 @@ public class RefreshTokenService {
 
     private void revokeRefreshTokens(User user) {
         var validRefreshTokens = refreshTokenRepository.findAllValidRefreshTokenByUser(user.getId());
-        System.out.println("Valid refresh token: " + validRefreshTokens);
         if (validRefreshTokens.isEmpty()) return;
         validRefreshTokens.forEach(token -> {
             token.setRevoked(true);

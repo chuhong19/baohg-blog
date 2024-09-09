@@ -80,11 +80,10 @@ public class PostService {
 
     public List<PostDTO> getAllMyFollowPosts() {
         List<PostDTO> allPosts = getAllPosts();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = (User) authentication.getPrincipal();
-        Long userId = principal.getId();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User principal = (User) authentication.getPrincipal();
+//        Long userId = principal.getId();
         List<Long> allMyFollowUsers = userService.getFollow();
-        System.out.println(allMyFollowUsers);
         List<PostDTO> allMyFollowPosts =
                 allPosts.stream()
                         .filter(post -> allMyFollowUsers.contains(post.getAuthorId()))

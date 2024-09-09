@@ -325,7 +325,6 @@ public class UserService {
     }
 
     public void disableUser(Long userId) {
-        System.out.println("...");
         Optional<User> userOpt = userRepository.findById(userId);
         if (!userOpt.isPresent()) {
             throw new InvalidUsernameException(String.format("User not found with id = %s", userId));
@@ -452,12 +451,11 @@ public class UserService {
             if (usernames != null && !usernames.isEmpty()) {
                 predicates.add(root.get(User_.USERNAME).in(usernames));
             }
-            System.out.println("Predicates 1: " + predicates);
 
             if (emails != null && !emails.isEmpty()) {
                 predicates.add(root.get(User_.EMAIL).in(emails));
             }
-            System.out.println("Predicates 2: " + predicates);
+
             if (roles != null && !roles.isEmpty()) {
                 predicates.add(root.join("roles", JoinType.INNER).get("role").in(roles));
             }

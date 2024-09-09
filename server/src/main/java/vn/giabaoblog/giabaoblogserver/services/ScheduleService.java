@@ -24,7 +24,6 @@ public class ScheduleService {
     @Scheduled(fixedRate = 60000)
     public void handleStartMeeting(){
         Date currentTime = new Date();
-        System.out.println("Current time: " + currentTime);
         List<Meeting> meetings = meetingRepository.findAll();
         for (Meeting meeting : meetings) {
             // Check status SCHEDULED to ONGOING

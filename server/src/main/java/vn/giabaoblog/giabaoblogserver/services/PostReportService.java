@@ -48,13 +48,11 @@ public class PostReportService {
     }
 
     public PostReport banPost(Long postReportId) {
-        System.out.println(postReportId);
         Optional<PostReport> postReportOpt = postReportRepository.findById(postReportId);
         if (!postReportOpt.isPresent()) {
             throw new NotFoundException(String.format("Post report not found"));
         }
         PostReport postReport = postReportOpt.get();
-        System.out.println(postReport);
         Long postId = postReport.getPostId();
         Optional<Post> postOpt = postRepository.findById(postId);
         if (!postOpt.isPresent()) {
