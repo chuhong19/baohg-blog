@@ -2,12 +2,10 @@ package vn.giabaoblog.giabaoblogserver.services.authentication;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +17,7 @@ import vn.giabaoblog.giabaoblogserver.data.domains.Role;
 import vn.giabaoblog.giabaoblogserver.data.domains.Token;
 import vn.giabaoblog.giabaoblogserver.data.domains.User;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.AuthenticationRequest;
+import vn.giabaoblog.giabaoblogserver.data.dto.request.EmailMessage;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.TokenRefreshRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.AuthenticationResponse;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.RegisterRequest;
@@ -31,13 +30,14 @@ import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.TokenRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
 import vn.giabaoblog.giabaoblogserver.services.RefreshTokenService;
-import vn.giabaoblog.giabaoblogserver.services.UserService;
+import vn.giabaoblog.giabaoblogserver.services.rabbitmq.RabbitProducer;
+import vn.giabaoblog.giabaoblogserver.services.EmailService;
 import vn.giabaoblog.giabaoblogserver.services.validation.PasswordValidatorService;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -53,6 +53,12 @@ public class AuthenticationService {
     private final PasswordValidatorService passwordValidatorService;
     @Autowired
     public RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private RabbitProducer emailProducer;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
@@ -108,7 +114,20 @@ public class AuthenticationService {
         var refreshToken = refreshTokenService.createRefreshToken(user.getId());
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+
+        String confirmationToken = generateConfirmationToken();
+        String confirmationLink = "https://google.com/confirm?token=" + confirmationToken;
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.setTo(user.getEmail());
+        emailMessage.setContent(confirmationLink);
+        emailMessage.setType("registration");
+        emailProducer.sendEmailMessage(emailMessage);
+
         return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken.getToken()).expiresIn(jwtService.getJwtExpiration()).build();
+    }
+
+    private String generateConfirmationToken() {
+        return UUID.randomUUID().toString();
     }
 
     private void saveUserToken(User user, String jwtToken) {

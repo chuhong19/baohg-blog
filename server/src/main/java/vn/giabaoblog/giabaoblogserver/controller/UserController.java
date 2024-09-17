@@ -10,7 +10,6 @@ import vn.giabaoblog.giabaoblogserver.data.dto.mix.RoleNameDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.UserIdDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.*;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.StandardResponse;
-import vn.giabaoblog.giabaoblogserver.data.dto.shortName.CreateOrUpdateUserDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.shortName.UserDTO;
 import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.services.UserService;

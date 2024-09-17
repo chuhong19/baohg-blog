@@ -17,13 +17,11 @@ import vn.giabaoblog.giabaoblogserver.config.exception.*;
 import vn.giabaoblog.giabaoblogserver.data.domains.*;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.SearchUserRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.UpdateProfileRequest;
-import vn.giabaoblog.giabaoblogserver.data.dto.shortName.CreateOrUpdateUserDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.shortName.UserDTO;
 import vn.giabaoblog.giabaoblogserver.data.repository.PermissionRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserFollowRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
-import vn.giabaoblog.giabaoblogserver.services.support.EmailService;
 import vn.giabaoblog.giabaoblogserver.services.validation.PasswordValidatorService;
 
 import javax.management.relation.RoleNotFoundException;

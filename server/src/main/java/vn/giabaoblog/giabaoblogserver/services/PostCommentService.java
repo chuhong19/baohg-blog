@@ -14,7 +14,6 @@ import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostCommentDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostIdDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.CommentPostRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.DeleteCommentRequest;
-import vn.giabaoblog.giabaoblogserver.data.dto.shortName.PostDTO;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostCommentRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;

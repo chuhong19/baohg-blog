@@ -2,15 +2,10 @@ package vn.giabaoblog.giabaoblogserver.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.giabaoblog.giabaoblogserver.data.domains.Post;
-import vn.giabaoblog.giabaoblogserver.data.domains.PostComment;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostCommentDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostIdDTO;
-import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostUserDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.UserIdDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.CommentPostRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.DeleteCommentRequest;

@@ -1,11 +1,8 @@
 package vn.giabaoblog.giabaoblogserver.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 import vn.giabaoblog.giabaoblogserver.data.domains.Meeting;
 import vn.giabaoblog.giabaoblogserver.data.enums.MeetingStatus;

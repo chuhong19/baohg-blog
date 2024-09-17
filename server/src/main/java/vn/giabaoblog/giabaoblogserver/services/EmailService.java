@@ -1,4 +1,4 @@
-package vn.giabaoblog.giabaoblogserver.services.support;
+package vn.giabaoblog.giabaoblogserver.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,4 +18,15 @@ public class EmailService {
 
         javaMailSender.send(message);
     }
+
+    public void sendRegistrationConfirmationEmail(String to, String confirmationLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Welcome to Java-App!");
+        message.setText("Thank you for registering with our application. "
+                + "Please confirm your registration by clicking the following link:\n" + confirmationLink);
+
+        javaMailSender.send(message);
+    }
+
 }
