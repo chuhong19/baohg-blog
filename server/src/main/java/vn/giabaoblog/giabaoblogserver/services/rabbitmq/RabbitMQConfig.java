@@ -1,42 +1,25 @@
 package vn.giabaoblog.giabaoblogserver.services.rabbitmq;
 
-import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String EMAIL_QUEUE = "emailQueue";
-    public static final String EMAIL_EXCHANGE = "emailExchange";
-    public static final String EMAIL_ROUTING_KEY = "emailRoutingKey";
+    private static final String RABBITMQ_HOST = "localhost";
+    private static final int RABBITMQ_PORT = 5672;
+    private static final String RABBITMQ_USERNAME = "guest";
+    private static final String RABBITMQ_PASSWORD = "guest";
 
     @Bean
-    public ConnectionFactory connectionFactory() {
+    public Connection rabbitConnection() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setPort(5672);
-        factory.setUsername("guest");
-        factory.setPassword("guest");
-        return factory;
-    }
+        factory.setHost(RABBITMQ_HOST);
+        factory.setPort(RABBITMQ_PORT);
+        factory.setUsername(RABBITMQ_USERNAME);
+        factory.setPassword(RABBITMQ_PASSWORD);
 
-    @Bean
-    public Connection connection(ConnectionFactory connectionFactory) throws Exception {
-        return connectionFactory.newConnection();
-    }
-
-    @Bean
-    public Channel channel(Connection connection) throws Exception {
-        Channel channel = connection.createChannel();
-        // Tạo queue
-        channel.queueDeclare(EMAIL_QUEUE, true, false, false, null);
-        // Tạo exchange
-        channel.exchangeDeclare(EMAIL_EXCHANGE, "topic");
-        // Tạo binding giữa queue và exchange với routing key
-        channel.queueBind(EMAIL_QUEUE, EMAIL_EXCHANGE, EMAIL_ROUTING_KEY);
-        return channel;
+        return factory.newConnection();
     }
 }

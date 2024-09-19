@@ -1,50 +1,34 @@
 package vn.giabaoblog.giabaoblogserver.services.rabbitmq;
 
 import com.rabbitmq.client.*;
-import vn.giabaoblog.giabaoblogserver.data.dto.request.EmailMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.giabaoblog.giabaoblogserver.services.EmailService;
 
-import java.io.IOException;
-
 @Service
 public class RabbitConsumer {
 
+    private static final String QUEUE_NAME = "myQueue";
+
     @Autowired
-    private ConnectionFactory connectionFactory;
+    private Connection rabbitConnection;
 
     @Autowired
     private EmailService emailService;
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    public void consumeMessages() {
-        try (Connection connection = connectionFactory.newConnection();
-             Channel channel = connection.createChannel()) {
-
-            channel.queueDeclare(RabbitMQConfig.EMAIL_QUEUE, true, false, false, null);
-            channel.exchangeDeclare(RabbitMQConfig.EMAIL_EXCHANGE, "topic", true);
-            channel.queueBind(RabbitMQConfig.EMAIL_QUEUE, RabbitMQConfig.EMAIL_EXCHANGE, RabbitMQConfig.EMAIL_ROUTING_KEY);
-
+    public void consumeMessage() throws Exception {
+        try (Channel channel = rabbitConnection.createChannel()) {
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String messageBody = new String(delivery.getBody(), "UTF-8");
-                EmailMessage emailMessage = objectMapper.readValue(messageBody, EmailMessage.class);
+                String message = new String(delivery.getBody(), "UTF-8");
+                System.out.println(" [x] Received '" + message + "'");
+                String[] parts = message.split(",");
+                String email = parts[0];
+                String confirmationLink = parts[1];
 
-                System.out.println(" [x] Received '" + emailMessage + "'");
-
-                // Xử lý email
-                if (emailMessage.getType().equals("registration")) {
-                    emailService.sendRegistrationConfirmationEmail(emailMessage.getTo(), emailMessage.getContent());
-                } else if (emailMessage.getType().equals("reset")) {
-                    emailService.sendResetPasswordEmail(emailMessage.getTo(), emailMessage.getContent());
-                }
+                emailService.sendRegistrationConfirmationEmail(email, confirmationLink);
             };
-
-            channel.basicConsume(RabbitMQConfig.EMAIL_QUEUE, true, deliverCallback, consumerTag -> { });
-        } catch (Exception e) {
-            e.printStackTrace();
+            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
         }
     }
 }
