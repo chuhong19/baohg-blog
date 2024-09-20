@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.giabaoblog.giabaoblogserver.config.NotificationHandler;
 import vn.giabaoblog.giabaoblogserver.config.exception.DuplicateException;
 import vn.giabaoblog.giabaoblogserver.config.exception.NotFoundException;
 import vn.giabaoblog.giabaoblogserver.data.domains.Post;
@@ -15,6 +16,7 @@ import vn.giabaoblog.giabaoblogserver.data.enums.LikeStatus;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostLikeRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -27,6 +29,9 @@ public class PostLikeService {
     @Autowired
     public final PostRepository postRepository;
 
+    @Autowired
+    private NotificationHandler notificationHandler;
+
     public PostLikeService(PostLikeRepository postLikeRepository, PostRepository postRepository) {
         this.postLikeRepository = postLikeRepository;
         this.postRepository = postRepository;
@@ -38,11 +43,14 @@ public class PostLikeService {
         if (existingPost.isEmpty()) {
             throw new NotFoundException("Post not found");
         }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User principal = (User) authentication.getPrincipal();
         Long userId = principal.getId();
+
         Optional<PostLike> existingLike = postLikeRepository.findByPostIdAndUserIdAndLikeStatus(postId, userId, LikeStatus.LIKE);
         Optional<PostLike> existingDislike = postLikeRepository.findByPostIdAndUserIdAndLikeStatus(postId, userId, LikeStatus.DISLIKE);
+
         if (existingLike.isPresent()) {
             throw new DuplicateException("You have already liked this post");
         } else {
@@ -52,6 +60,15 @@ public class PostLikeService {
             }
             PostLike postLike = new PostLike(postId, userId, LikeStatus.LIKE);
             postLikeRepository.save(postLike);
+
+            Long authorId = existingPost.get().getAuthorId();
+            String notificationMessage = "User " + principal.getUsername() + " liked your post!";
+            try {
+                System.out.println("Notification message: " + notificationMessage);
+                notificationHandler.sendNotification(authorId, notificationMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

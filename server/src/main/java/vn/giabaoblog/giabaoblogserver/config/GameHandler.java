@@ -11,6 +11,7 @@ public class GameHandler extends TextWebSocketHandler {
     private final List<WebSocketSession> sessions = new ArrayList<>();
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("Connection game established");
         sessions.add(session);
     }
 

@@ -9,7 +9,9 @@ const TictacToe = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+
     const newSocket = new WebSocket('ws://localhost:8080/tictactoe');
+
     newSocket.onmessage = (event) => {
       const { board, isXNext } = JSON.parse(event.data);
       setBoard(board);
@@ -21,8 +23,10 @@ const TictacToe = () => {
         setIsDraw(true); // Kiểm tra kết quả hòa
       }
     };
+
     setSocket(newSocket);
     return () => newSocket.close();
+    
   }, []);
 
   const handleClick = (index) => {

@@ -11,5 +11,19 @@ services:
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
       - my_postgres_data:/var/lib/postgresql/data
   
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"  
+      - "15672:15672" 
+    networks:
+      - rabbitmq_network
+    restart: always
+  
 volumes:
   my_postgres_data:
+
+networks:
+  rabbitmq_network:
+    driver: bridge

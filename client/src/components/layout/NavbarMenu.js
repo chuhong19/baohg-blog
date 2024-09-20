@@ -6,12 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useContext } from 'react';
+import Notifications from '../Notification';
 
 const NavbarMenu = ({ children }) => {
 
   const {
     authState: {
       username,
+      userId
     },
     logoutUser,
   } = useContext(AuthContext);
@@ -31,6 +33,9 @@ const NavbarMenu = ({ children }) => {
           />
           CBH
         </Navbar.Brand>
+
+        <Notifications userId={userId} />
+
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>
