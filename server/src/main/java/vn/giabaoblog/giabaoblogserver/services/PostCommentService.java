@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.giabaoblog.giabaoblogserver.config.NotificationHandler;
 import vn.giabaoblog.giabaoblogserver.config.exception.AccessException;
 import vn.giabaoblog.giabaoblogserver.config.exception.NotFoundException;
 import vn.giabaoblog.giabaoblogserver.data.domains.Post;
@@ -18,6 +19,7 @@ import vn.giabaoblog.giabaoblogserver.data.repository.PostCommentRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +36,9 @@ public class PostCommentService {
 
     @Autowired
     public final UserRepository userRepository;
+
+    @Autowired
+    private NotificationHandler notificationHandler;
 
     public PostCommentService(PostCommentRepository postCommentRepository, PostRepository postRepository, UserRepository userRepository) {
         this.postCommentRepository = postCommentRepository;
@@ -52,6 +57,16 @@ public class PostCommentService {
         Long userId = principal.getId();
         PostComment postComment = new PostComment(postId, userId, request.getContent());
         postCommentRepository.save(postComment);
+
+        Long authorId = existingPost.get().getAuthorId();
+        if (Objects.equals(authorId, userId)) return;
+        String notificationMessage = principal.getUsername() + " commented in your post!";
+        try {
+            System.out.println("Notification message: " + notificationMessage);
+            notificationHandler.sendNotification(authorId, notificationMessage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteCommentPost(DeleteCommentRequest request) {

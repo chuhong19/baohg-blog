@@ -33,7 +33,6 @@ public class NotificationHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("Connection likepost established...");
         String query = session.getUri().getQuery();
 
         Map<String, String> queryParams = parseQueryString(query);
@@ -51,7 +50,6 @@ public class NotificationHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("Connection closed...");
         Long userId = getUserIdFromSession(session);
         userSessions.remove(userId);
     }
@@ -59,8 +57,6 @@ public class NotificationHandler extends TextWebSocketHandler {
     public void sendNotification(Long userId, String message) throws IOException {
         WebSocketSession session = userSessions.get(userId);
         if (session != null && session.isOpen()) {
-            System.out.println("Sending message to userId: " + userId);
-            System.out.println("Session id: " + session);
             session.sendMessage(new TextMessage(message));
         }
     }

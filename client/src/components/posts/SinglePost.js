@@ -86,7 +86,7 @@ const SinglePost = ({
           <h4>Comments:</h4>
           {comments.map(comment => (
             <div key={comment.id}>
-              <p>{comment.content}</p>
+              <p>{comment.username}: {comment.content}</p>
               <h6>{formatDateTime(comment.createdAt)}</h6>
             </div>
           ))}

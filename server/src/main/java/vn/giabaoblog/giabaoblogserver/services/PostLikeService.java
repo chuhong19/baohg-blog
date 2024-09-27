@@ -17,6 +17,7 @@ import vn.giabaoblog.giabaoblogserver.data.repository.PostLikeRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.PostRepository;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -62,7 +63,8 @@ public class PostLikeService {
             postLikeRepository.save(postLike);
 
             Long authorId = existingPost.get().getAuthorId();
-            String notificationMessage = "User " + principal.getUsername() + " liked your post!";
+            if (Objects.equals(authorId, userId)) return;
+            String notificationMessage = principal.getUsername() + " liked your post!";
             try {
                 System.out.println("Notification message: " + notificationMessage);
                 notificationHandler.sendNotification(authorId, notificationMessage);

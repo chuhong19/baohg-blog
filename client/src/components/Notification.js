@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify'; 
+import CustomToast from './CustomToast';
 
 const Notifications = ({ userId }) => {  
     const [socket, setSocket] = useState(null);
+    const [toasts, setToasts] = useState([]); 
 
     useEffect(() => {
 
@@ -15,7 +16,7 @@ const Notifications = ({ userId }) => {
         newSocket.onmessage = (event) => {
             console.log("Received notification:", event.data);
             const message = event.data;
-            toast.info(message);  
+            showToast(message);
         };
 
         newSocket.onclose = () => {
@@ -35,7 +36,29 @@ const Notifications = ({ userId }) => {
         };
     }, [userId]);
 
-    return null;
+    const showToast = (message) => {
+        const id = Math.random().toString(36).substr(2, 9);  // Tạo ID ngẫu nhiên
+        setToasts([...toasts, { id, message }]);
+
+        // Xóa thông báo sau 5 giây
+        setTimeout(() => {
+            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+        }, 5000);
+    };
+
+    return (
+        <div>
+            {/* Hiển thị tất cả các toast */}
+            {toasts.map((toast) => (
+                <CustomToast
+                    key={toast.id}
+                    message={toast.message}
+                    duration={5000}
+                    onClose={() => setToasts(toasts.filter(t => t.id !== toast.id))}
+                />
+            ))}
+        </div>
+    );
 };
 
 export default Notifications;
