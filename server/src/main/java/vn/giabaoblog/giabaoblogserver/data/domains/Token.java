@@ -31,7 +31,7 @@ public class Token extends Auditable {
     public boolean expired;
 
     @JoinColumn(name = "[user_id]", referencedColumnName = "[id]",
-            nullable = true, insertable = false, updatable = false)
+            nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public User user;
 }

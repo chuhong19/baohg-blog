@@ -3,7 +3,6 @@ package vn.giabaoblog.giabaoblogserver.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.giabaoblog.giabaoblogserver.data.domains.Post;
 import vn.giabaoblog.giabaoblogserver.data.domains.PostReport;
 import vn.giabaoblog.giabaoblogserver.data.dto.mix.PostReportIdDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.response.StandardResponse;

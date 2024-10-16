@@ -17,13 +17,11 @@ import vn.giabaoblog.giabaoblogserver.config.exception.*;
 import vn.giabaoblog.giabaoblogserver.data.domains.*;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.SearchUserRequest;
 import vn.giabaoblog.giabaoblogserver.data.dto.request.UpdateProfileRequest;
-import vn.giabaoblog.giabaoblogserver.data.dto.shortName.CreateOrUpdateUserDTO;
 import vn.giabaoblog.giabaoblogserver.data.dto.shortName.UserDTO;
 import vn.giabaoblog.giabaoblogserver.data.repository.PermissionRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.RoleRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserFollowRepository;
 import vn.giabaoblog.giabaoblogserver.data.repository.UserRepository;
-import vn.giabaoblog.giabaoblogserver.services.support.EmailService;
 import vn.giabaoblog.giabaoblogserver.services.validation.PasswordValidatorService;
 
 import javax.management.relation.RoleNotFoundException;
@@ -235,14 +233,13 @@ public class UserService {
             Long userId = user.getId();
             return getPermissionByUserId(userId);
         } else {
-            // Xử lý khi không thể lấy thông tin User từ SecurityContextHolder
             return Collections.emptySet();
         }
     }
 
     public Set<String> getPermissionByRoleId(Long roleId) throws RoleNotFoundException {
         Optional<Role> roleOpt = roleRepository.findById(roleId);
-        if (!roleOpt.isPresent()) {
+        if (roleOpt.isEmpty()) {
             throw new RoleNotFoundException(String.format("Role not found with Id = %s", roleId));
         }
         Role role = roleOpt.get();
@@ -260,7 +257,7 @@ public class UserService {
 
     public void forgotPassword(String username, String email) {
         Optional<User> userOpt = userRepository.findByUsernameOrEmail(username);
-        if (!userOpt.isPresent()) {
+        if (userOpt.isEmpty()) {
             throw new InvalidUsernameException(String.format("User not found with username = %s", username));
         }
         User user = userOpt.get();
@@ -276,7 +273,7 @@ public class UserService {
 
     public boolean verifyResetToken(String username, String resetToken) {
         Optional<User> userOpt = userRepository.findByUsernameOrEmail(username);
-        if (!userOpt.isPresent()) {
+        if (userOpt.isEmpty()) {
             throw new InvalidUsernameException(String.format("User not found with username = %s", username));
         }
         User user = userOpt.get();
@@ -325,7 +322,6 @@ public class UserService {
     }
 
     public void disableUser(Long userId) {
-        System.out.println("...");
         Optional<User> userOpt = userRepository.findById(userId);
         if (!userOpt.isPresent()) {
             throw new InvalidUsernameException(String.format("User not found with id = %s", userId));
@@ -452,12 +448,11 @@ public class UserService {
             if (usernames != null && !usernames.isEmpty()) {
                 predicates.add(root.get(User_.USERNAME).in(usernames));
             }
-            System.out.println("Predicates 1: " + predicates);
 
             if (emails != null && !emails.isEmpty()) {
                 predicates.add(root.get(User_.EMAIL).in(emails));
             }
-            System.out.println("Predicates 2: " + predicates);
+
             if (roles != null && !roles.isEmpty()) {
                 predicates.add(root.join("roles", JoinType.INNER).get("role").in(roles));
             }
@@ -539,6 +534,7 @@ public class UserService {
     }
 
     public UserDTO getProfileById() {
+        System.out.println("Get profile called");
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User principal = (User) authentication.getPrincipal();

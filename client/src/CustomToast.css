@@ -1,0 +1,43 @@
+.custom-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #323232;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0.9;
+  animation: fadein 0.5s, fadeout 0.5s 4.5s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toast-message {
+  flex-grow: 1; 
+}
+
+.toast-close-button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.toast-close-button:hover {
+  color: #ff4444; 
+}
+
+@keyframes fadein {
+  from { bottom: 0; opacity: 0; }
+  to { bottom: 20px; opacity: 0.9; }
+}
+
+@keyframes fadeout {
+  from { opacity: 0.9; }
+  to { opacity: 0; }
+}

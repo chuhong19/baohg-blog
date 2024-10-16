@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Permission extends Auditable {
+public class Permission {
     public Permission(Long id, String permission) {
         this.id = id;
         this.permission = permission;
@@ -21,7 +21,7 @@ public class Permission extends Auditable {
     @Column(name="id")
     private Long id;
 
-    @Column(name="permission", nullable = true)
+    @Column(name="permission")
     private String permission;
 
     // enabled as default

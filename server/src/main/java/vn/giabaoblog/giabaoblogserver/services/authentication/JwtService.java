@@ -75,14 +75,19 @@ public class JwtService {
 
         tokenClaimComponent.getClaims(extraClaims, userDetails, expiration);
 
-        return Jwts.builder().setClaims(extraClaims).setSubject(String.valueOf(userDetails.getId())).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+        return Jwts.builder().
+                setClaims(extraClaims).
+                setSubject(String.valueOf(userDetails.getId())).
+                setIssuedAt(new Date(System.currentTimeMillis())).
+                setExpiration(new Date(System.currentTimeMillis() + expiration)).
+                signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String id = extractId(token);
+        final String userIdGetFromToken = extractId(token);
         User user = (User) userDetails;
-        final String id1 = String.valueOf(user.getId());
-        return id.equals(id1) && !isTokenExpired(token);
+        final String userId = String.valueOf(user.getId());
+        return userIdGetFromToken.equals(userId) && !isTokenExpired(token);
     }
 
     public boolean isTokenExpired(String token) {

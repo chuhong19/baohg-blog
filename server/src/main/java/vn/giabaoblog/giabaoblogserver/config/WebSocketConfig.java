@@ -15,5 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .setAllowedOrigins("*");
         registry.addHandler(new GameHandler(), "/tictactoe")
                 .setAllowedOrigins("*");
+        registry.addHandler(new NotificationHandler(), "/notifications")
+                .setAllowedOrigins("*");
     }
 }

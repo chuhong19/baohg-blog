@@ -81,6 +81,11 @@ public class AppWideExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("404", "NotFound", e.getMessage()));
     }
 
+    @ExceptionHandler(InvalidPermissionDataException.class)
+    public ResponseEntity<?> handleInvalidPermissionDataException(InvalidPermissionDataException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("404", "Invalid permission data", e.getMessage()));
+    }
+
     @ExceptionHandler(AccessException.class)
     public ResponseEntity<?> handleAccessException(AccessException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("400", "Cannot access this action", e.getMessage()));
@@ -101,5 +106,8 @@ public class AppWideExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("400", "Not enough exception", e.getMessage()));
     }
 
-
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<?> handleTokenRefreshException(TokenRefreshException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StandardResponse.create("400", "Refresh token not found", e.getMessage()));
+    }
 }

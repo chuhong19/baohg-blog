@@ -14,10 +14,6 @@ import java.util.Random;
 public class EncryptionService {
     public static final String ALGORITHM = "PBKDF2WithHmacSHA1";
     public static final int KEY_LENGTH = 256;
-
-    // demo salt for testing or first setup purpose
-    public static final String DEFAULT_SALT = "WZeBXmCI9cAz3LyY9Sdllj9l5iPsXC";
-
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final int ITERATIONS = 10000;

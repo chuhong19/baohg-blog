@@ -17,7 +17,6 @@ public class ChatHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.add(session);
-        System.out.println("Connection Established: " + session.getId());
     }
 
     @Override
@@ -28,7 +27,6 @@ public class ChatHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.remove(session);
-        System.out.println("Connection Closed: " + session.getId());
     }
 
     public void sendMessageToAll(String message) {
