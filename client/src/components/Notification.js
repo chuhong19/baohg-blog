@@ -10,7 +10,7 @@ const Notifications = ({ userId }) => {
         const newSocket = new WebSocket(`ws://localhost:8080/notifications?userId=${userId}`);
 
         newSocket.onopen = () => {
-            console.log("Connected to the WebSocket server");
+            console.log("Connected to the WebSocket server from Notification.js");
         };
 
         newSocket.onmessage = (event) => {

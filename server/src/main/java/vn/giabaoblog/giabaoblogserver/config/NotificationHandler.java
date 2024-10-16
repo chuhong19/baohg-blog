@@ -44,7 +44,6 @@ public class NotificationHandler extends TextWebSocketHandler {
             session.getAttributes().put("userId", userId);
         } else {
             session.close();
-            System.out.println("userId not found in query string, closing session.");
         }
     }
 
