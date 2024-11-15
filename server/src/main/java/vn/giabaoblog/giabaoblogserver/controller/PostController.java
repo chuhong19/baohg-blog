@@ -59,7 +59,7 @@ public class PostController {
         return StandardResponse.create("200", "Post created", postDTO);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public StandardResponse updatePost(@RequestBody CreateOrUpdatePostDTO request) {
         PostDTO postDTO = postService.updatePost(request);
         return StandardResponse.create("200", "Post updated", postDTO);

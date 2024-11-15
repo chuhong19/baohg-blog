@@ -1,13 +1,11 @@
 package vn.giabaoblog.giabaoblogserver.data.domains;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import vn.giabaoblog.giabaoblogserver.data.enums.LikeStatus;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Builder
 @Entity
 @NoArgsConstructor

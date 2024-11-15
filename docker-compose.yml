@@ -1,29 +1,39 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres
-    container_name: my-postgres
+    container_name: baohgblog_postgres
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: 5433
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=5433
     ports:
       - "5433:5432"
     volumes:
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
       - my_postgres_data:/var/lib/postgresql/data
-  
+    restart: always
+
   rabbitmq:
     image: rabbitmq:management
-    container_name: rabbitmq-container
+    container_name: baohgblog_rabbitmq
     ports:
       - "5672:5672"  
       - "15672:15672" 
-    networks:
-      - rabbitmq_network
     restart: always
-  
+
+  redis:
+    image: redis:alpine3.19
+    container_name: baohgblog_redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+
 volumes:
   my_postgres_data:
 
-networks:
-  rabbitmq_network:
-    driver: bridge
+

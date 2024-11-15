@@ -1,12 +1,10 @@
 package vn.giabaoblog.giabaoblogserver.data.domains;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Builder
 @Entity
 @NoArgsConstructor

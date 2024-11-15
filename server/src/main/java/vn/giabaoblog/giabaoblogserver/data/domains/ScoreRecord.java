@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "leaderboard")
-public class LeaderBoard {
+public class ScoreRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +26,5 @@ public class LeaderBoard {
 
     @Column(name= "user_create_id", nullable = false)
     public String userId;
-
-    // add
-
-    // get
-
-    // edit
-
-    // delete
 
 }
