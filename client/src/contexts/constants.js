@@ -1,4 +1,4 @@
-export const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8080' : 'sth';
+export const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8080' : 'http://localhost/api';
 
 export const LOCAL_STORAGE_TOKEN_NAME = 'access-token';
 
